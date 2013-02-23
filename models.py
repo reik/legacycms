@@ -8,6 +8,7 @@ from mptt.models import MPTTModel
 from feincms.module.blog.models import Entry, EntryAdmin
 from feincms.module.page.models import Page
 from feincms.content.raw.models import RawContent
+from feincms.content.richtext.models import RichTextContent
 from feincms.content.image.models import ImageContent
 from feincms.content.medialibrary.models import MediaFileContent
 from feincms.content.application.models import ApplicationContent
@@ -25,6 +26,8 @@ Page.register_templates({
         ),
     })
 Page.create_content_type(RawContent)
+Page.create_content_type(RichTextContent)
+
 MediaFileContent.default_create_content_type(Page)
 Page.create_content_type(ImageContent, POSITION_CHOICES=(
     ('default', 'Default position'),
@@ -43,7 +46,6 @@ def get_admin_fields(form, *args, **kwargs):
 Page.create_content_type(ApplicationContent, APPLICATIONS=(
     ('blog_urls', 'Blog', {'admin_fields': get_admin_fields}),
     ))
-
 
 Entry.register_regions(
     ('main', 'Main region'),
@@ -93,5 +95,3 @@ class Category(MPTTModel):
 # add m2m field to entry so it shows up in entry admin
 Entry.add_to_class('categories', models.ManyToManyField(Category, blank=True, null=True))
 EntryAdmin.list_filter += ('categories',)
-
-
