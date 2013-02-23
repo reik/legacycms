@@ -1,0 +1,35 @@
+{% extends "registration/base_registration.html" %}
+
+
+{% block title %}Log in{% endblock %}
+{% block body_class %}{{ block.super }} login_form{% endblock %}
+
+
+{% block content_title %}
+{% endblock %}
+
+
+{% block inner-content %}
+<form action="." method="post" class="login_form clearfix">{% csrf_token %}
+    <h2>Log in</h2>
+    {% for field in form %}
+    <div class="{% if field.errors %}errors {% endif %}{% if field.field.required %}required{% endif %}">
+        {{ field.label_tag }}
+        {{ field }}
+        {{ field.errors }}
+    </div>
+    {% endfor %}
+    <input type="submit" value="Login" />
+    {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+</form>
+<h2 class="clearfix">Log in with social auth</h2>
+<div class="social-auth clearfix">
+    <form>
+    {% for name in social_auth.backends %}
+        <a class="button left" rel="nofollow" href="{% url socialauth_begin name %}">{{ name|title }}</a>
+    {% endfor %}
+    </form>
+</div>
+<h2>Create new account</h2>
+<form><a class="button left" href="{% url email-register %}">Register</a></form>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends "registration/base_registration.html" %}
+
+
+{% block title %}Logged out{% endblock %}
+{% block body_class %}{{ block.super }} logout{% endblock %}
+
+
+{% block content_title %}
+  <h2>Logged out</h2>
+  <p>You have been logged out.</p>
+{% endblock %}
+
+
+{% block inner-content %}
+<h2>Log in</h2>
+<form action="{% url django.contrib.auth.views.login %}" method="post" class="login_form clearfix">{% csrf_token %}
+    <div class="required">
+        <label for="id_email">E-Mail</label>
+        <input type="text" name="email" id="id_email">
+    </div>
+    <div class="required">
+        <label for="id_password">Password</label>
+        <input type="password" name="password" id="id_password">
+    </div>
+    <input class="clearfix" type="submit" value="Login">
+    <input type="hidden" name="next" value="{% if next %}{{ next }}{% else %}/{% endif %}">
+</form>
+{% include "registration/_social_auth.html" %}
+{% endblock %}
