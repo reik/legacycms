@@ -44,7 +44,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.media',
     'django.core.context_processors.request',
     'django.core.context_processors.static',
-
     'feincms.context_processors.add_page_if_missing',
 )
 
@@ -59,8 +58,10 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
+INTERNAL_IPS = ('127.0.0.1',)
 ROOT_URLCONF = 'legacycms.urls'
 
 TEMPLATE_DIRS = (os.path.join(APP_BASEDIR, "templates"),)
@@ -69,9 +70,11 @@ AUTHENTICATION_BACKENDS = (
     'social_auth.backends.twitter.TwitterBackend',
     'social_auth.backends.facebook.FacebookBackend',
     'social_auth.backends.contrib.github.GithubBackend',
-    'feincmsorg.email_usernames.backends.EmailOrUsernameModelBackend',
+    'legacycms.email_usernames.backends.EmailOrUsernameModelBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
+
+AUTH_PROFILE_MODULE = 'profiles.UserProfile'
 
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -87,8 +90,11 @@ INSTALLED_APPS = (
     'feincms.module.page',
     'feincms.module.medialibrary',
     'legacycms',
-
     'mptt',
+    'profiles',
+
+    'debug_toolbar',
+    'south',
 )
 
 LANGUAGES = (
@@ -97,3 +103,7 @@ LANGUAGES = (
 )
 
 FEINCMS_TREE_EDITOR_INCLUDE_ANCESTORS = True
+
+ACCOUNT_ACTIVATION_DAYS = 7
+LOGIN_URL          = 'accounts/login/'
+LOGIN_REDIRECT_URL = '/'
