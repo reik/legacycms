@@ -4,9 +4,13 @@ from django_countries import CountryField
 
 class UserProfile(models.Model):
     user = models.ForeignKey(User, unique=True)
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
     country = CountryField()
     url = models.URLField("Website", blank=True)
     organization = models.CharField(max_length=50, blank=True)
+
+    class Meta:
+        app_label = 'legacycms'
+
+    def get_absolute_url(self):
+        return "/profiles/%s" % self.user.username
 
