@@ -1,0 +1,81 @@
+<!doctype html> {% load applicationcontent_tags feincms_tags feincms_page_tags %}
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://www.facebook.com/2008/fbml" xmlns:og="http://ogp.me/ns#">
+<head>
+    {{ feincms_page.content.media }}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ MEDIA_URL }}css/global.css" />
+    <link href="{{ MEDIA_URL }}css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <title>{{ feincms_page.title }}</title>
+</head>
+<body>
+    <div class="container">
+        <div class="navbar navbar-fixed-top">
+          <div class="navbar-inner">
+            <div class="container">
+              <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </a>
+              <a class="brand" href="/">Legacy</a>
+              <div class="nav-collapse">
+                <ul class="nav">
+                  <li class="active"><a href="/"><i class="icon-home icon-white"></i> Home</a></li>
+                  <li><a href="/profiles/{{ profile.user.username }}">Your Profile</a></li>
+                  <li><a href="/profiles">All Users</a></li>
+                  <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Your Profile<b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                      <li><a href="/profiles/create">Create</a></li>
+                      <li><a href="/profiles/edit">Edit</a></li>
+                    </ul>
+                  </li>
+                  <li>{% if request.user.is_authenticated %}<a class="logout" href="{% url auth_logout %}">logout</a>{% endif %}</li>
+                </ul>
+                <form class="navbar-search pull-right" action="">
+                  <input type="text" class="search-query span2" placeholder="Search">
+                </form>
+              </div><!-- /.nav-collapse -->
+            </div><!-- /.container -->
+          </div><!-- /.navbar-inner -->
+        </div><!-- /.navbar -->
+
+        <div id="navigation">
+            special features<br />
+            <nav>
+                <div class="span-18 clearfix">
+                    {% feincms_navigation of feincms_page as nav level=1 %}
+                    {% for p in nav %}
+                        <a {% if p|is_equal_or_parent_of:feincms_page %}class="current"{% endif %} href="{{ p.get_absolute_url }}">{{ p.title }}</a>
+                    {% endfor %}
+                </div>
+            </nav>
+        </div>
+
+        <div id="sidebar">
+            <h2>Sidebar content</h2>
+                {% feincms_nav feincms_page level=2 as sublevel %}
+                {% for p in sublevel %}
+                    {% if forloop.first %}<ul>{% endif %}
+                    <li><a href="{{ p.get_absolute_url }}">{{ p.title }}</a></li>
+                    {% if forloop.last %}</ul>{% endif %}
+                {% empty %}
+                    No subpages
+                {% endfor %}
+
+                {% block sidebar %}{% feincms_render_region feincms_page "sidebar" request %}{% endblock %}
+        </div>
+        <div id="main">
+            <h1>{{ feincms_page.title }}</h1>
+            {% block content %}{% feincms_render_region feincms_page "main" request %}{% endblock %}
+        </div>
+
+        {% feincms_frontend_editing feincms_page request %}
+
+        <span id="something">{% get_fragment request "something" %}</span>
+
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/global.js"></script>
+        <script src="{{ MEDIA_URL }}js/bootstrap.min.js"></script>
+    </body>
+</html>
