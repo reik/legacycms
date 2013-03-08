@@ -14,19 +14,32 @@ from feincms.content.medialibrary.models import MediaFileContent
 from feincms.content.application.models import ApplicationContent
 from feincms.module.page.extensions.navigation import NavigationExtension, PagePretender
 from feincms.content.application.models import app_reverse
-
+from gallery import specs
+from gallery.models import GalleryContent
 
 Page.register_templates({
     'key': 'base',
-    'title': 'Base Template',
-    'path': 'base.html',
+    'title': 'Base Page Template',
+    'path': 'base_page.html',
     'regions': (
         ('main', 'Main region'),
         ('sidebar', 'Sidebar', 'inherited'),
         ),
+    },{
+    'title': 'Base Static template',
+    'path': 'base_static.html',
+    'regions': (
+        ('main', _('Main content area')),
+        ),
     })
 Page.create_content_type(RawContent)
 Page.create_content_type(RichTextContent)
+
+GALLERY_TYPES = [
+    specs.ClassicLightbox(), # standard type
+]
+
+Page.create_content_type(GalleryContent, regions=('main',), types=GALLERY_TYPES)
 
 MediaFileContent.default_create_content_type(Page)
 Page.create_content_type(ImageContent, POSITION_CHOICES=(
@@ -43,9 +56,9 @@ def get_admin_fields(form, *args, **kwargs):
             ),
     }
 
-Page.create_content_type(ApplicationContent, APPLICATIONS=(
-    ('blog_urls', 'Blog', {'admin_fields': get_admin_fields}),
-    ))
+#Page.create_content_type(ApplicationContent, APPLICATIONS=(
+#    ('blog_urls', 'Blog', {'admin_fields': get_admin_fields}),
+#    ))
 
 Entry.register_regions(
     ('main', 'Main region'),
@@ -73,8 +86,8 @@ class BlogEntriesNavigationExtension(NavigationExtension):
                 )
 
 Page.register_extensions(
-    'feincms.module.page.extensions.navigation',
-    'feincms.module.page.extensions.sites',
+#    'feincms.module.page.extensions.navigation',
+#    'feincms.module.page.extensions.sites',
     )
 
 

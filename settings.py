@@ -89,12 +89,12 @@ INSTALLED_APPS = (
     'feincms.module.blog',
     'feincms.module.page',
     'feincms.module.medialibrary',
-    'legacycms',
     'mptt',
-    'profiles',
-
-    'debug_toolbar',
     'south',
+    'legacycms',
+    'profiles',
+    'gallery',
+    'debug_toolbar',
 )
 
 LANGUAGES = (
@@ -107,3 +107,5 @@ FEINCMS_TREE_EDITOR_INCLUDE_ANCESTORS = True
 ACCOUNT_ACTIVATION_DAYS = 7
 LOGIN_URL          = 'accounts/login/'
 LOGIN_REDIRECT_URL = '/'
+
+AUTH_PROFILE_MODULE = "legacycms.UserProfile"
